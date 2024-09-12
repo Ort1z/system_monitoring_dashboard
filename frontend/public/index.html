@@ -1,11 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>System Monitoring Dashboard</title>
 </head>
+
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <h1>System Monitoring Dashboard</h1>
+    <div id="cpu">
+      <h2>CPU</h2>
+      <p>Usage: <span id="cpu-usage">0</span>%</p>
+    </div>
+    <div id="memory">
+      <h2>Memory</h2>
+      <p>Usage: <span id="memory-usage">0</span>%</p>
+    </div>
+    <div id="disk">
+      <h2>Disk</h2>
+      <p>Usage: <span id="disk-usage">0</span>%</p>
+    </div>
+    <div id="network">
+      <h2>Network</h2>
+      <p>Download: <span id="network-download">0</span> KB/s</p>
+      <p>Upload: <span id="network-upload">0</span> KB/s</p>
+    </div>
+  
+  </div>
 </body>
+
 </html>
