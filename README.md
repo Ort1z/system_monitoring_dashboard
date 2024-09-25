@@ -75,9 +75,9 @@ Significant progress has been made toward completing the MVP. We have set up the
 [View the live dashboard](https://your-deployed-site-link.com)
 
 ## Author Links
-- [Masingita Maluleke LinkedIn](https://linkedin.com/in/yourprofile)
+- [Masingita Maluleke LinkedIn]([https://linkedin.com/in/yourprofile](https://www.linkedin.com/in/thefreelancer201/))
 
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/system-monitoring-dashboard.git
+   [git clone https://github.com/ort1z/system_monitoring_dashboard.git](https://github.com/Ort1z/system_monitoring_dashboard.git)
