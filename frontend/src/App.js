@@ -1,63 +1,92 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import HomePage from './pages/HomePage';
+import DashboardPage from './pages/DashboardPage';
+import AlertsPage from './pages/AlertsPage';
+import ReportsPage from './pages/ReportsPage';
+import AIPage from './pages/AIPage';
+import ARViewPage from './pages/ARViewPage';
+import VoiceControl from './components/VoiceControl';
+import NavBar from './components/NavBar';
+import './styles/global.css';
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#00f5d4',
+    },
+    secondary: {
+      main: '#f15bb5',
+    },
+    background: {
+      default: '#0a0a12',
+      paper: '#161622',
+    },
+  },
+  typography: {
+    fontFamily: '"Inter", sans-serif',
+    h1: {
+      fontSize: '3.5rem',
+      fontWeight: 700,
+      background: 'linear-gradient(45deg, #00f5d4 30%, #f15bb5 90%)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: '12px',
+          textTransform: 'none',
+          padding: '12px 24px',
+          fontWeight: 600,
+        },
+      },
+    },
+  },
+});
 
 function App() {
-  const [metrics, setMetrics] = useState([]);
-  const [alerts, setAlerts] = useState([]);
-  const [systems, setSystems] = useState([]);
-
+  const [darkMode, setDarkMode] = useState(true);
+  const [voiceActive, setVoiceActive] = useState(false);
+  const [arSupported, setArSupported] = useState(false);
+  
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const metricsResponse = await axios.get('http://localhost:5000/api/metrics');
-        setMetrics(metricsResponse.data);
-
-        const alertsResponse = await axios.get('http://localhost:5000/api/alerts');
-        setAlerts(alertsResponse.data);
-
-        const systemsResponse = await axios.get('http://localhost:5000/api/systems');
-        setSystems(systemsResponse.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    if (navigator.xr) {
+      navigator.xr.isSessionSupported('immersive-ar').then(setArSupported);
+    }
   }, []);
 
   return (
-    <div className="App">
-      <h1>System Monitoring Dashboard</h1>
-      
-      <h2>Systems</h2>
-      <ul>
-        {systems.map(system => (
-          <li key={system.id}>{system.name} - {system.type}</li>
-        ))}
-      </ul>
-
-      <h2>Metrics</h2>
-      <ul>
-        {metrics.map(metric => (
-          <li key={metric.id}>
-            {metric.type}: {metric.value} {metric.unit} 
-            (System ID: {metric.system_id}, Time: {new Date(metric.timestamp).toLocaleString()})
-          </li>
-        ))}
-      </ul>
-
-      <h2>Alerts</h2>
-      <ul>
-        {alerts.map(alert => (
-          <li key={alert.id}>
-            {alert.condition} {alert.threshold} - {alert.severity} - {alert.status}
-            (System ID: {alert.system_id}, Metric ID: {alert.metric_id})
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <div className="app-container">
+          <VoiceControl active={voiceActive} setActive={setVoiceActive} />
+          <NavBar 
+            darkMode={darkMode} 
+            setDarkMode={setDarkMode} 
+            voiceActive={voiceActive}
+            setVoiceActive={setVoiceActive}
+            arSupported={arSupported}
+          />
+          
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/alerts" element={<AlertsPage />} />
+            <Route path="/reports" element={<ReportsPage />} />
+            <Route path="/ai-insights" element={<AIPage />} />
+            {arSupported && <Route path="/ar-view" element={<ARViewPage />} />}
+          </Routes>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 
 export default App;
-
